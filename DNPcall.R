@@ -53,13 +53,13 @@ df_int <- gather(data=ForUniqReads1,key="col", value="pos", 1:4)
 ForUniqReads <- df_int[,c(3,1)]
 colnames(ForUniqReads) <- c("df.chr","uniq")
 
-# make a "DNP-based" df
+# make a DNP-based df
 RefAltDNP <- as.data.frame(cbind(paste0(r_DNPlist$chr,":",r_DNPlist$pos1,"|",r_DNPlist$chr,":",r_DNPlist$pos2),
                                  gsub('^(.{1})(.*)$', '\\1|\\2',r_DNPlist$REF),
                                  gsub('^(.{1})(.*)$', '\\1|\\2',r_DNPlist$ALT)))
 colnames(RefAltDNP)<-c("POS","ref","alt")
 
-# make pileup file with samtools
+# pileup calling with samtools
 cat("\nMaking mpileup...\n")
 commA = paste0("samtools mpileup -b ",bamlist,
                " -l bedfile_for_mpileup.bed -f ",reference,
@@ -78,7 +78,7 @@ pileup_bamlist <- read.csv("mpileup.txt", quote="", row.names=NULL, stringsAsFac
 common_columns <- 3
 final_merged_data <- NULL
 
-# processing for each sample
+# calling processing for each sample
 for (i in samplelist) {
 
   cat(paste0("\nProcessing sample: ", i, "\n"))
@@ -96,10 +96,10 @@ for (i in samplelist) {
            V6 = !!sym(paste0("V", qual_col)),
            V7 = !!sym(paste0("V", id_col)))
 
-  # substitute "." and "," with reference bases
+  # substitute . and , with reference base
   indiv_df$V5 <- mapply(function(v3, v5) gsub("[.,]", v3, v5), indiv_df$V3, indiv_df$V5)
 
-  # create a new column in the form "chr:position"
+  # create "chr:position" column
   indiv_df$chr <- paste(indiv_df$V1, indiv_df$V2, sep = ":")
 
   # select necessary columns
@@ -112,7 +112,7 @@ for (i in samplelist) {
   df2$df.V5 <- gsub('', ' ', df2$df.V5)
   df2$df.V7 <- gsub(',', ' ', df2$df.V7)
 
-  # split bases and reads columns
+  # split bases and reads columns in single cells
   df3 <- df2 %>% separate_rows(df.V5, df.V7, sep = " ")
   df4 <- df3[,c(3,1,2)]
   df4.1 <-  df4[!(df4$df.V7==""), ]
@@ -133,18 +133,18 @@ for (i in samplelist) {
   DF <- merge(DF_chr,DF_pos, by='readUniq')
   names(DF) <- c("ID_DNP","chr","pos")
 
-  # substitute strand specific characters (unnecessary) with only uppercase letters
+  # substitute characters strand specific characters (unecessary) with only uppercase letters
   DF$pos = gsub('g', 'G', DF$pos)
   DF$pos = gsub('a', 'A', DF$pos)
   DF$pos = gsub('c', 'C', DF$pos)
   DF$pos = gsub('t', 'T', DF$pos)
   DF$pos = gsub(',', '.', DF$pos)
 
-  # remove reads with indels, indicated with "@"
+  # eliminate reads with "@", indicating reads with INDELs
   DFnoINDEL <- DF %>%
     filter_all(all_vars(!grepl("@", .)))
 
-  # keep only microhaplotype
+  # keep only micro haplotype
   righe_modificate <- DFnoINDEL[nchar(DFnoINDEL$pos)>6,]
 
   # extract DNP info
@@ -179,7 +179,7 @@ for (i in samplelist) {
   alt_dt <- subset(data_info, pos2 == alt)
   colnames(alt_dt) <- c("DNPs", "geno", "n_alt", "ref", "alt")
 
-  # create df for other alleles
+  # create df for other (error) alleles
   altro_dt <- subset(data_info, pos2 != ref & pos2 != alt)
   altro_dt2 <- data.frame(DNPs = altro_dt$chr, n = altro_dt$n)
   altro_dt3 <- altro_dt2 %>% group_by(DNPs) %>% summarise(n_altro = sum(n))
@@ -193,12 +193,16 @@ for (i in samplelist) {
   dataframe_final <- merged3[, c(1, 11, 12, 3, 7, 10)]
   colnames(dataframe_final) <- c("DNPs", "Reference", "Alternative", "N_Reference", "N_Alternative", "N_Altro")
 
-  # compute allele ratio for genotyping
+  # compute ratio reference allele/total for genotyping
   dataframe_final <- dataframe_final %>%
-    mutate(ratio_Ref=ifelse(N_Altro/(N_Altro+N_Reference+N_Alternative) >= 0.1, "NA", 
+    mutate(ratio_Ref=ifelse(N_Altro/(N_Altro+N_Reference+N_Alternative) >= 0.1, NA, 
                              N_Reference / (N_Reference + N_Alternative))) %>%
     select(everything(), ratio_Ref)
   
+  
+  
+
+
   FINAL_df <- merge(dataframe_final, df_grouped, by.x = "DNPs", by.y = "chr", all = TRUE)
 
   FINAL_df2 <- separate(FINAL_df, col = "DNPs", into = c("pos1", "pos2"), sep = "\\|")
@@ -232,7 +236,7 @@ for (i in samplelist) {
 
 }
 
-# finalize simil-VCF file substituting allele ratio with genotype
+# finalise simil-VCF file substituting ratio ref with genotype
 final_merged_data <- final_merged_data %>%
   mutate_at(vars(starts_with("GT_")),
             ~ ifelse(. <= 0.1, "1/1",
@@ -243,7 +247,7 @@ final_merged_data <- final_merged_data %>%
 # save simil-VCF file
 write.table(final_merged_data, "AllGenotypes.txt", sep = "\t", row.names = FALSE, quote = FALSE)
 
-# remove useless files
+# remove now useless files
 commB = paste0("rm mpileup.txt")
 system(commB, ignore.stderr=T)
 
