@@ -7,7 +7,9 @@ For issues, please email me: francesco.ravasini@uniroma1.it
 
 ## Software required
 ```samtools``` version 1.18 or higher
+
 ```R``` version 4.2.0 or higher
+
 ```R``` packages: ```tidyverse``` and ```stringr```
 
 ## Usage
@@ -15,24 +17,38 @@ For issues, please email me: francesco.ravasini@uniroma1.it
 
 **Files:**
 ```list_of_bams``` is the list of bamfiles to be analyzed, one per row with the full path to them. An example can be found in ```DNPcall/examples/inputs/bamlist.txt```
+
 ```list_of_DNPs``` is the list of DNPs to be called. An example can be found in ```DNPcall/examples/inputs/gnomAD_chr22_DNPs_list.txt```. The columns are in the order: chromosome, position #1 of DNP, position #2 of  DNP, reference allele, alternative allele.
+
 ```reference_genome``` is the reference genome in fasta format.
 
 ## Outputs
 ```AllGenotypes.txt``` a file containing all the genotypes for each sample and each DNP analyzed. 0/0 is reference homozygous, 0/1 isheterozygous and 1/1 is alternative homozygous. An example van be found in ```DNPcall/examples/outputs/AllGenotypes.txt```
 
 For each sample, a  file named ```full_output_{name_of_the_sample}``` is also produced. An example van be found in ```DNPcall/examples/outputs/full_output_S_Abkhasian-1.txt```. The columns represent:
+
 ```chr```: chromosome
+
 ```pos1```: position #1 of DNP
+
 ```pos2```: position #2 of DNP
+
 ```REF```: reference allele
+
 ```ALT```: alternative allele
+
 ```N_REF```: number of reads matching reference allele
+
 ```N_ALT```: number of reads matching alternative allele
+
 ```N_Other```: number of reads matching other alelle, different from both reference and alternative
+
 ```allele_ratio```: ratio between reference and alternative allele, in the form N_REF/(N_REF+N_ALT)
+
 ```combined_bases```: list of all the combination of bases found in the two position of the DNP (including reference and alternative alleles)
+
 ```combined_counts```: number of all the reads matching all the combination of bases, in the same order ase the previous column
+
 ```total_count```: total number of reads
 
 ## Attention
