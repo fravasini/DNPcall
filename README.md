@@ -3,7 +3,9 @@ R and samtools based script to call Double Nucleotide Polymorphisms (DNPs) based
 
 DNPcall leverages the read name information in samtools pileup file format to finely reconstruct the microhaplotype represented by the DNP.
 
-For issues, please email me: francesco.ravasini@uniroma1.it
+Authors: Letizia Pistacchia and Francesco Ravasini
+
+For issues: francesco.ravasini@uniroma1.it
 
 ## Software required
 ```samtools``` version 1.18 or higher
