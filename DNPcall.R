@@ -62,7 +62,7 @@ colnames(RefAltDNP)<-c("POS","ref","alt")
 # pileup calling with samtools
 cat("\nMaking mpileup...\n")
 commA = paste0("samtools mpileup -b ",bamlist,
-               " -r chr22 -l bedfile_for_mpileup.bed -f ",reference,
+               " -l bedfile_for_mpileup.bed -f ",reference,
                " --output-QNAME --no-output-ins --no-output-del --no-output-ends > mpileup.txt")
 
 system(commA, ignore.stderr=T)
