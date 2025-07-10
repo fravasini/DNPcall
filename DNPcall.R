@@ -807,10 +807,10 @@ ggsave(file.path(output, "summary", "DNPs_covered_UpSet_plot.pdf"),
 
 
 # remove now useless files
-#commB = paste0("rm mpileup.txt")
-#system(commB, ignore.stderr=T)
+commB = paste0("rm mpileup.txt")
+system(commB, ignore.stderr=T)
 
-#commC = paste0("rm bedfile_for_mpileup.bed")
-#system(commC, ignore.stderr=T)
+commC = paste0("rm bedfile_for_mpileup.bed")
+system(commC, ignore.stderr=T)
 
 cat("\nAll done!\n")
