@@ -51,7 +51,7 @@ Additional optional flag:
 `Rscript DNPcall.R --bamlist=list_of_bams --DNPs=list_of_DNPs --reference=reference_genome --out=output_name --parallel`
 
 ## Outputs
-DNPcall will produce several files that: (1) return the genotypes of the individuals: (2) may help discriminate between DNPs and adjacent SNPs and (3) asses the overall quality of putative DNPs. Examples of these files can be found here: `XXXXXX`.
+DNPcall will produce several files that: (1) return the genotypes of the individuals: (2) may help discriminate between DNPs and adjacent SNPs and (3) asses the overall quality of putative DNPs. Examples of these files can be found in the `examples/outputs` directory of this repository.
 
 ### Summary files:
 
