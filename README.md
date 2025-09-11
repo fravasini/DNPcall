@@ -1,9 +1,14 @@
 # DNPcall
+## Info and citation
 R and samtools based script to call Double Nucleotide Polymorphisms (DNPs) based on reads name.
 
 Authors: Letizia Pistacchia and Francesco Ravasini
 
 For issues: francesco.ravasini@uniroma1.it
+
+If your using DNPcall please cite the [original publication](https://doi.org/10.1093/bioadv/vbaf209):
+
+Letizia Pistacchia, Francesco Ravasini, Elisa Bella, Eugenia D’Atanasio, Fulvio Cruciani, Beniamino Trombetta, DNPcall: A New Pipeline for Accurate Double Nucleotide Polymorphism Calling, Bioinformatics Advances, 2025;, vbaf209, https://doi.org/10.1093/bioadv/vbaf209
 
 DNPcall leverages the read name information in samtools pileup file format to finely reconstruct the microhaplotype represented by the DNP.
 
