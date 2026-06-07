@@ -4,7 +4,7 @@ R and samtools based script to call Double Nucleotide Polymorphisms (DNPs) based
 
 Authors: Letizia Pistacchia and Francesco Ravasini
 
-For issues: francesco.ravasini@uniroma1.it
+For issues: fravasini01@gmail.com
 
 If your using DNPcall please cite the [original publication](https://doi.org/10.1093/bioadv/vbaf209):
 
